@@ -60,11 +60,58 @@
 body.dark .theme-card-footer span:last-child{color:var(--theme-accent)}
 .thematic-list{display:grid;gap:10px;margin:14px 0 24px;padding-left:24px}
 .thematic-list li{padding-left:4px;line-height:1.65}
+.catalog-tools{background:transparent;border:0;border-radius:0;padding:0;margin:0 0 28px}
+.search-row{padding:0 0 18px;border-bottom:1px solid var(--line)}
+.search-box input,.search-row select{background:transparent;border:0;border-bottom:2px solid var(--line);border-radius:0;padding:11px 2px}
+.search-box input:focus,.search-row select:focus{border-bottom-color:var(--blue)}
+.chips{gap:4px 20px;padding-top:4px}
+.chip,.pill{border-radius:0}
+.pill{border:0;background:transparent;padding:0;color:var(--muted);font-weight:750;letter-spacing:.4px}
+.chip{border:0;border-bottom:2px solid transparent;background:transparent;padding:8px 1px;color:var(--muted)}
+.chip:hover{color:var(--ink);border-bottom-color:var(--line)}
+.chip[aria-pressed=true]{background:transparent;color:var(--blue);border-color:var(--blue)}
+.lesson-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 32px;border-top:1px solid var(--line)}
+.lesson-card{border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;padding:20px 0;box-shadow:none}
+.lesson-card:hover{border-color:var(--line);box-shadow:none}
+.lesson-card .lesson-open:hover{color:var(--blue)}
+.theme-hero{grid-template-columns:minmax(0,1fr) 210px;gap:40px;padding:18px 0 32px;border-radius:0;background:transparent;color:var(--ink);border-bottom:2px solid var(--line);overflow:visible}
+.theme-hero::after{display:none}
+.theme-hero h1{font-size:clamp(2.6rem,6vw,5rem);color:var(--ink)}
+.theme-hero p{color:var(--muted);margin-bottom:0}
+.theme-count{border-left:1px solid var(--line)}
+.theme-count strong{color:var(--theme-accent)}
+.theme-view[data-theme="startups"] .theme-count strong{color:#168b24}
+body.dark .theme-view[data-theme="startups"] .theme-count strong,body.dark .theme-view[data-theme="startups"] .theme-card-code{color:var(--theme-accent)}
+.theme-count span{color:var(--muted)}
+.theme-section-head{margin:32px 0 10px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.theme-grid{display:block}
+.theme-card{display:grid;grid-template-columns:112px minmax(0,1fr) 110px;grid-template-areas:"code title footer" "code description footer";gap:6px 24px;min-height:0;padding:24px 0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;box-shadow:none;overflow:visible}
+.theme-card::before{display:none}
+.theme-card:hover{border-color:var(--line);box-shadow:none}
+.theme-card-code{grid-area:code;padding-top:3px;color:var(--theme-accent)}
+.theme-view[data-theme="startups"] .theme-card-code{color:#168b24}
+.theme-card h3{grid-area:title;font-size:1.12rem}
+.theme-card h3 button:hover{color:var(--blue)}
+.theme-card p{grid-area:description;max-width:720px}
+.theme-card-footer{grid-area:footer;display:grid;justify-items:end;align-content:center;gap:8px;margin:0}
+.reader-body{max-width:820px;margin:0 auto;background:transparent;border:0;border-radius:0;padding:0;box-shadow:none}
+.reader-body .notion-quote{background:transparent;border-radius:0;padding:8px 0 8px 32px}
+.reader-body .notion-quote::before{left:10px;top:8px}
+.reader-body .source-page{padding:0}
+.reader-body .source-page+.source-page{padding-top:34px;margin-top:34px}
+.theory-outline{max-width:820px;margin:8px auto 38px;padding:18px 0;display:grid;grid-template-columns:150px minmax(0,1fr);gap:24px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.theory-outline-title{font-size:.72rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
+.theory-outline ol{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 24px;counter-reset:outline}
+.theory-outline li{counter-increment:outline;min-width:0}
+.theory-outline button{display:flex;gap:8px;color:var(--ink);border:0;background:transparent;padding:0;text-align:left;font-size:.84rem;line-height:1.45}
+.theory-outline button::before{content:counter(outline,decimal-leading-zero);color:var(--muted);font-size:.7rem;font-weight:800;padding-top:2px}
+.theory-outline button:hover{color:var(--blue)}
+.reader-body h2.source-heading{scroll-margin-top:120px}
 .reading-progress{position:absolute;left:0;right:0;bottom:-1px;height:3px;overflow:hidden}
 .reading-progress-bar{display:block;width:100%;height:100%;background:var(--green);transform:scaleX(0);transform-origin:left;transition:transform .12s linear}
 @media(prefers-reduced-motion:reduce){.reading-progress-bar{transition:none}}
-@media(max-width:850px){.theme-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.theme-hero{grid-template-columns:1fr}.theme-count{border-left:0;border-top:1px solid #ffffff26;padding-top:22px;justify-content:start;text-align:left}}
-@media(max-width:560px){.theme-hero{padding:28px 24px;border-radius:17px}.theme-grid{grid-template-columns:1fr}.theme-card{min-height:180px}.theme-section-head{align-items:flex-start;flex-direction:column}}
+@media(max-width:850px){.theme-hero{grid-template-columns:1fr}.theme-count{border-left:0;border-top:1px solid var(--line);padding-top:22px;justify-content:start;text-align:left}.lesson-grid{grid-template-columns:1fr}.theory-outline{grid-template-columns:1fr;gap:12px}}
+@media(max-width:560px){.theme-hero{padding:10px 0 24px}.theme-card{grid-template-columns:64px minmax(0,1fr);grid-template-areas:"code title" "code description" "code footer";gap:7px 14px}.theme-card-footer{justify-items:start;display:flex}.theme-card-footer span:first-child{display:none}.theme-section-head{align-items:flex-start;flex-direction:column}.theory-outline ol{grid-template-columns:1fr}.search-row{gap:8px}.chips{gap:2px 14px}.reader-body{padding:0 2px}}
 </style>
 </head>
 <body>
@@ -582,6 +629,16 @@ function enhanceTheory(root){
  root.querySelectorAll('h3.source-heading').forEach(old=>{const heading=document.createElement('h2');heading.className=old.className;heading.innerHTML=old.innerHTML;old.replaceWith(heading);});
  root.querySelectorAll('h4.source-subheading').forEach(old=>{const heading=document.createElement('h3');heading.className=old.className;heading.innerHTML=old.innerHTML;old.replaceWith(heading);});
 }
+function addTheoryOutline(root){
+ if(!root)return;
+ const headings=[...root.querySelectorAll('h2.source-heading')].filter(heading=>heading.textContent.trim());
+ if(headings.length<2)return;
+ const nav=document.createElement('nav'),title=document.createElement('div'),list=document.createElement('ol');
+ nav.className='theory-outline';nav.setAttribute('aria-label','Contenido de esta lección');
+ title.className='theory-outline-title';title.textContent='En esta lección';nav.append(title,list);
+ headings.forEach((heading,index)=>{heading.id=`theory-section-${index+1}`;const item=document.createElement('li'),button=document.createElement('button');button.type='button';button.textContent=heading.textContent.trim();button.addEventListener('click',()=>heading.scrollIntoView({behavior:'smooth',block:'start'}));item.append(button);list.append(item);});
+ root.before(nav);
+}
 function renderReader(s,page=0){view=page?'page':'read';currentSection=s||sectionForPage(page);currentPage=page;const series=s?.theme?sections.filter(item=>item.theme===s.theme).sort((a,b)=>(a.themeOrder||99)-(b.themeOrder||99)||a.title.localeCompare(b.title)):chapters,index=series.findIndex(c=>c.id===s?.id),title=page?`Página ${page}`:s.title,category=currentSection?.category||'intro';if(s){state.lastSection=s.id;save();}
 const children=s?sections.filter(x=>x.parentId===s.id):[],content=page?BOOK.pages[page-1].html:s.html;
 const prev=page?{title:'Anterior',page:page-1}:index>0?series[index-1]:null;const next=page?{title:'Siguiente',page:page+1}:index>=0&&index<series.length-1?series[index+1]:null;
@@ -589,6 +646,7 @@ const effectiveScope=currentSection?.category==='reading'?(currentSection.parent
 const vocab=VOCAB.filter(v=>v.sectionId===effectiveScope);
 main.innerHTML=`<div class="reader-wrap"><div class="reader-top"><button class="btn" type="button" data-view="home">← Biblioteca</button><div class="reader-nav">${prev&&(!page||page>1)?`<button class="btn" type="button" ${page?'data-page="'+prev.page+'"':'data-open-section="'+prev.id+'"'}>← Anterior</button>`:''}${next&&(!page||page<493)?`<button class="btn" type="button" ${page?'data-page="'+next.page+'"':'data-open-section="'+next.id+'"'}>Siguiente →</button>`:''}</div></div><div class="reader-meta"><span class="pill">${esc(currentSection?.level||labels[category]||'Libro')}</span><span>${page?esc(currentSection?.title||''): s.page?'Páginas '+s.page+(s.endPage>s.page?'–'+s.endPage:''):'Material complementario'}</span></div><h1 class="page-title">${esc(title)}</h1><div class="reader-actions">${vocab.length?`<button class="btn btn-primary" data-study="cards" data-scope="${effectiveScope}" type="button">Tarjetas · ${vocab.length}</button>`:''}${s?`<button class="btn" type="button" data-complete="${s.id}" aria-pressed="${!!state.completed[s.id]}">${state.completed[s.id]?'✓ Estudiado':'Marcar como estudiado'}</button>`:''}${page||s.page?`<button class="btn" data-original data-pdf-page="${page||s.page}" type="button">Original</button>`:''}</div>${children.length?`<details class="chapter-children"><summary>Secciones de este bloque · ${children.length}</summary><div class="child-links">${children.map(c=>`<button class="btn" type="button" data-open-section="${c.id}">${esc(c.title)}</button>`).join('')}</div></details>`:''}<div class="reader-body" id="reader-content">${content}</div><div class="reader-bottom actions">${next&&(!page||page<493)?`<button class="btn btn-primary" type="button" ${page?'data-page="'+next.page+'"':'data-open-section="'+next.id+'"'}>Continuar →</button>`:''}<button class="btn" id="print-section" type="button">Imprimir este tema</button><label class="field" style="display:flex;align-items:center;gap:8px">Ir a página<input type="number" id="page-jump" min="1" max="493" value="${page||s.page}" style="width:85px"><button class="btn" id="page-jump-go" type="button">Ir</button></label></div><details class="source-text-box"><summary class="text-button">Consultar transcripción íntegra de las páginas originales</summary><div class="source-text">${(page?[BOOK.pages[page-1]]:BOOK.pages.slice(s.page-1,s.endPage)).map(p=>`<h3>Página ${p.number}</h3>${esc(p.text)}`).join('\n\n')}</div></details></div>`;
 enhanceTheory($('reader-content'));
+addTheoryOutline($('reader-content'));
 if(s?.theme){const back=main.querySelector('.reader-top [data-view="home"]'),themeTitle=window.EnglishActivities.themes?.[s.theme]?.title||'Temas';if(back){back.dataset.view=s.theme;back.textContent=`← ${themeTitle}`;}}
 $('print-section').addEventListener('click',()=>window.print());$('page-jump-go').addEventListener('click',()=>goPage($('page-jump').value));$('page-jump').addEventListener('keydown',e=>{if(e.key==='Enter')goPage(e.target.value);});if(s){window.EnglishActivities.mountChapter(s.id);if(!s.page){$('page-jump').closest('label').hidden=true;main.querySelector('.source-text-box').hidden=true;}}}
 function renderCardsView(id){currentSection=byId.get(id)||null;

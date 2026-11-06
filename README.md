@@ -21,6 +21,8 @@ Después abre `http://localhost:4173`.
 - Modo claro/oscuro y tres tamaños de lectura.
 - Encabezado fijo, indicador de avance y reanudación del punto de lectura de cada tema.
 - Cursos de Philosophy, History, Startups, Economy, Cinema y Literature.
+- 93 lecturas desarrolladas con contexto, análisis, aplicaciones, preguntas y vocabulario clave.
+- Tiempo estimado de lectura visible en el catálogo y dentro de cada capítulo.
 - Narración con una sola voz inglesa seleccionada automáticamente y seguimiento palabra por palabra.
 - Diseño adaptable y navegación por teclado.
 

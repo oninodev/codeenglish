@@ -17,6 +17,9 @@ Después abre `http://localhost:4173`.
 - 493 páginas y 48 capítulos organizados por nivel.
 - Búsqueda en todo el contenido y filtros por categoría.
 - 369 tarjetas con pronunciación mediante la voz del navegador.
+- Tres bibliotecas temáticas: Startups, Historia y Filosofía.
+- 8 lecciones originales de estrategia para startups y 13 casos complementarios.
+- 16 capítulos cronológicos de Historia y 10 capítulos originales de Filosofía.
 - Marcadores, notas, respuestas y avance guardados en `localStorage`.
 - Exportación e importación del progreso en JSON.
 - Modo claro/oscuro y tres tamaños de lectura.
@@ -25,7 +28,7 @@ Después abre `http://localhost:4173`.
 
 ## Estructura
 
-El proyecto se distribuye como un único `index.html`. El contenido del libro, el PDF original, los estilos y la lógica están incorporados para que pueda copiarse y utilizarse sin conexión ni servicios externos.
+La aplicación principal está en `index.html`. Las nuevas rutas temáticas y sus capítulos originales se mantienen en `themes.js`; ambos archivos se sirven de forma estática y no requieren instalación, compilación ni servicios externos.
 
 Al modificarlo, conviene comprobar al menos:
 

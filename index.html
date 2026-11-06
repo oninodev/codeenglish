@@ -22,10 +22,16 @@
 <style>
 .app-header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card) 94%,transparent);backdrop-filter:blur(12px)}
 .hero,.stats-strip{display:none}
+.reader-body .source-title{font-size:2em;line-height:1.2;letter-spacing:-.045em;margin:12px 0 24px}
+.reader-body h2.source-heading{font-size:1.45em;line-height:1.3;margin:32px 0 16px;letter-spacing:-.025em}
+.reader-body h3.source-subheading{font-size:1.1em;line-height:1.45;margin:26px 0 10px;color:var(--ink)}
+.reader-body strong{font-weight:750;color:var(--ink)}
 .reader-body .theory-point{position:relative;padding-left:1.35em}
 .reader-body .theory-point::before{content:"•";position:absolute;left:.15em;top:0;color:var(--blue);font-weight:800}
 .reader-body .theory-chevron{display:flex;align-items:baseline;gap:.55em}
 .reader-body .theory-chevron::before{content:">";color:var(--blue);font-weight:800;font-size:.9em;flex:none}
+.reader-body .notion-quote{position:relative;margin:20px 0;padding:14px 18px 14px 42px;border-left:3px solid var(--blue);border-radius:0 9px 9px 0;background:var(--soft)}
+.reader-body .notion-quote::before{content:">";position:absolute;left:17px;top:14px;color:var(--blue);font-weight:800}
 .reading-progress{position:absolute;left:0;right:0;bottom:-1px;height:3px;overflow:hidden}
 .reading-progress-bar{display:block;width:100%;height:100%;background:var(--green);transform:scaleX(0);transform-origin:left;transition:transform .12s linear}
 @media(prefers-reduced-motion:reduce){.reading-progress-bar{transition:none}}
@@ -528,8 +534,12 @@ function enhanceTheory(root){
  root.querySelectorAll('h3,h4,p.source-paragraph').forEach(el=>{
   if(el.matches('h3')){const title=norm(el.textContent);if(stops.test(title))inTheory=false;else if(starts.test(title))inTheory=true;return;}
   if(el.matches('h4')){if(inTheory)el.classList.add('theory-chevron');return;}
-  if(inTheory&&!el.classList.contains('source-eyebrow')&&el.textContent.trim().length>30)el.classList.add('theory-point');
+  const lead=el.textContent.trim().match(/^(Objetivo|Regla|Recuerda|Nota|Clave|Importante):/i);
+  if(lead){el.classList.add('notion-quote');if(el.firstChild?.nodeType===Node.TEXT_NODE){const rest=el.firstChild.splitText(lead[0].length),strong=document.createElement('strong');strong.textContent=lead[0];el.insertBefore(strong,rest);el.firstChild.remove();}}
+  if(inTheory&&!lead&&!el.classList.contains('source-eyebrow')&&el.textContent.trim().length>30)el.classList.add('theory-point');
  });
+ root.querySelectorAll('h3.source-heading').forEach(old=>{const heading=document.createElement('h2');heading.className=old.className;heading.innerHTML=old.innerHTML;old.replaceWith(heading);});
+ root.querySelectorAll('h4.source-subheading').forEach(old=>{const heading=document.createElement('h3');heading.className=old.className;heading.innerHTML=old.innerHTML;old.replaceWith(heading);});
 }
 function renderReader(s,page=0){view=page?'page':'read';currentSection=s||sectionForPage(page);currentPage=page;const index=chapters.findIndex(c=>c.id===s?.id),title=page?`Página ${page}`:s.title,category=currentSection?.category||'intro';if(s){state.lastSection=s.id;save();}
 const children=s?sections.filter(x=>x.parentId===s.id):[],content=page?BOOK.pages[page-1].html:s.html;

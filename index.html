@@ -123,8 +123,8 @@ body.dark .theme-view[data-theme="startups"] .theme-count strong,body.dark .them
       <button data-view="home" class="nav-button" type="button">Libro</button>
       <button data-view="cards" class="nav-button" type="button">Tarjetas</button>
       <button data-view="startups" class="nav-button" type="button">Startups</button>
-      <button data-view="history" class="nav-button" type="button">Historia</button>
-      <button data-view="philosophy" class="nav-button" type="button">Filosofía</button>
+      <button data-view="history" class="nav-button" type="button">History</button>
+      <button data-view="philosophy" class="nav-button" type="button">Philosophy</button>
     </nav>
     <div class="header-tools">
       <button id="theme-toggle" class="btn theme-toggle" type="button" aria-label="Activar modo oscuro" aria-pressed="false"><span id="theme-icon" aria-hidden="true">☾</span><span id="theme-label">Modo oscuro</span></button>
@@ -532,7 +532,9 @@ function mergeIncoming(incoming){if(!incoming)return;validateIncoming(incoming);
 // New content uses the original reader, cards, tables and blockquote styles.
 function nativeQuiz(context,questions){
  const saved=state().quiz[context]||[];
- return `<section data-quiz-context="${esc(context)}"><h3 class="source-heading">Práctica interactiva</h3><p class="source-paragraph">Elige una respuesta y comprueba el motivo.</p><div class="stack">${questions.map((q,i)=>{const answer=saved[i],graded=answer?.graded&&Number.isInteger(answer.selected);return `<fieldset class="question"><legend>${i+1}. ${esc(q.prompt||q.q)}</legend><div class="study-choices">${q.options.map((text,j)=>`<label class="study-choice"><input type="radio" name="quiz-${esc(context)}-${i}" value="${j}" ${answer?.selected===j?'checked':''}><span>${esc(text)}</span></label>`).join('')}</div>${graded?`<div class="feedback ${answer.selected===q.answer?'correct':'incorrect'}" role="status"><strong>${answer.selected===q.answer?'Correcto.':'Revisa esta respuesta.'}</strong> ${esc(q.explanation)}${answer.selected!==q.answer?`<p>Respuesta: ${esc(q.options[q.answer])}</p><button class="text-button" type="button" data-action="save-quiz-error" data-context="${esc(context)}" data-question="${i}">Guardar para repasar</button>`:''}</div>`:''}</fieldset>`;}).join('')}</div><div class="actions"><button class="btn btn-primary" type="button" data-action="check-quiz" data-context="${esc(context)}">Comprobar respuestas</button><button class="btn" type="button" data-action="reset-quiz" data-context="${esc(context)}">Intentar otra vez</button></div><p class="muted" data-quiz-status role="status"></p></section>`;
+ const english=context.startsWith('reading:');
+ const copy=english?{title:'Interactive practice',intro:'Choose an answer, then check the reason.',right:'Correct.',wrong:'Review this answer.',answer:'Answer:',save:'Save for review',check:'Check answers',reset:'Try again'}:{title:'Práctica interactiva',intro:'Elige una respuesta y comprueba el motivo.',right:'Correcto.',wrong:'Revisa esta respuesta.',answer:'Respuesta:',save:'Guardar para repasar',check:'Comprobar respuestas',reset:'Intentar otra vez'};
+ return `<section data-quiz-context="${esc(context)}"><h3 class="source-heading">${copy.title}</h3><p class="source-paragraph">${copy.intro}</p><div class="stack">${questions.map((q,i)=>{const answer=saved[i],graded=answer?.graded&&Number.isInteger(answer.selected);return `<fieldset class="question"><legend>${i+1}. ${esc(q.prompt||q.q)}</legend><div class="study-choices">${q.options.map((text,j)=>`<label class="study-choice"><input type="radio" name="quiz-${esc(context)}-${i}" value="${j}" ${answer?.selected===j?'checked':''}><span>${esc(text)}</span></label>`).join('')}</div>${graded?`<div class="feedback ${answer.selected===q.answer?'correct':'incorrect'}" role="status"><strong>${answer.selected===q.answer?copy.right:copy.wrong}</strong> ${esc(q.explanation)}${answer.selected!==q.answer?`<p>${copy.answer} ${esc(q.options[q.answer])}</p><button class="text-button" type="button" data-action="save-quiz-error" data-context="${esc(context)}" data-question="${i}">${copy.save}</button>`:''}</div>`:''}</fieldset>`;}).join('')}</div><div class="actions"><button class="btn btn-primary" type="button" data-action="check-quiz" data-context="${esc(context)}">${copy.check}</button><button class="btn" type="button" data-action="reset-quiz" data-context="${esc(context)}">${copy.reset}</button></div><p class="muted" data-quiz-status role="status"></p></section>`;
 }
 function nativeErrors(key){
  return `<details class="note-box"><summary class="text-button">Anotar algo que me costó decir</summary><form class="stack" data-error-form="${esc(key)}"><label class="field">Lo que dije o quería decir<textarea name="wanted" required maxlength="1000" placeholder="Quería pedir que repitieran la última parte."></textarea></label><label class="field">Forma correcta en inglés<textarea name="correct" required maxlength="1000" placeholder="Could you repeat the last part, please?"></textarea></label><label class="field">Contexto o explicación<input type="text" name="context" maxlength="500"></label><div class="actions"><button class="btn btn-primary" type="submit">Añadir al repaso</button></div><p class="muted" data-error-status role="status"></p></form></details>`;
@@ -565,6 +567,7 @@ window.EnglishActivities={entries:DATA.entries,data:DATA,cleanup,stopAudio,attac
 })();
 </script>
 <script src="themes.js"></script>
+<script src="themes-en.js"></script>
 <script>(() => {
 'use strict';
 const BOOK=JSON.parse(document.getElementById('book-data').textContent);
@@ -609,7 +612,7 @@ function renderTheme(theme){
  const config=window.EnglishActivities.themes?.[theme];
  if(!config){renderHome();return;}
  const list=sections.filter(section=>section.theme===theme).sort((a,b)=>(a.themeOrder||99)-(b.themeOrder||99)||a.title.localeCompare(b.title));
- main.innerHTML=`<div class="main-wrap theme-view" data-theme="${esc(theme)}"><section class="theme-hero"><div><div class="eyebrow">${esc(config.eyebrow)}</div><h1>${esc(config.title)}</h1><p>${esc(config.description)}</p></div><div class="theme-count"><strong>${list.length}</strong><span>${esc(config.chapterLabel)}</span></div></section><div class="theme-section-head"><div><h2>Ruta de aprendizaje</h2><p>Avanza en orden o abre el capítulo que necesites.</p></div><button class="btn" type="button" data-view="home">← Volver al libro</button></div><section class="theme-grid" aria-label="Capítulos de ${esc(config.title)}">${list.map((section,index)=>`<article class="theme-card"><span class="theme-card-code">Capítulo ${String(index+1).padStart(2,'0')}</span><h3><button type="button" data-open-section="${esc(section.id)}">${esc(section.title)}</button></h3><p>${esc(section.summary||'Lectura temática con conceptos, contexto y preguntas para pensar.')}</p><div class="theme-card-footer"><span>${esc(section.level||'Lectura')}</span><span>Abrir →</span></div></article>`).join('')}</section></div>`;
+ main.innerHTML=`<div class="main-wrap theme-view" data-theme="${esc(theme)}"><section class="theme-hero"><div><div class="eyebrow">${esc(config.eyebrow)}</div><h1>${esc(config.title)}</h1><p>${esc(config.description)}</p></div><div class="theme-count"><strong>${list.length}</strong><span>${esc(config.chapterLabel)}</span></div></section><div class="theme-section-head"><div><h2>Learning path</h2><p>Move through the lessons in order or open the chapter you need.</p></div><button class="btn" type="button" data-view="home">← Back to the book</button></div><section class="theme-grid" aria-label="${esc(config.title)} chapters">${list.map((section,index)=>`<article class="theme-card"><span class="theme-card-code">Chapter ${String(index+1).padStart(2,'0')}</span><h3><button type="button" data-open-section="${esc(section.id)}">${esc(section.title)}</button></h3><p>${esc(section.summary||'A thematic reading with concepts, context, and questions to consider.')}</p><div class="theme-card-footer"><span>${esc(section.level||'Reading')}</span><span>Open →</span></div></article>`).join('')}</section></div>`;
 }
 function catalogBase(){return sections.filter(s=>{if(s.category==='part'||s.category==='editorial')return catalogCategory==='all';if(catalogCategory!=='all'&&s.category!==catalogCategory)return false;if(catalogCategory==='essential'&&s.id==='essential')return false;if(catalogCategory==='pronunciation'&&s.id==='pronunciation')return false;if(catalogCategory==='vocabulary'&&s.id==='vocabulary')return false;if(catalogCategory==='solutions'&&s.parentId)return false;if(catalogLevel&&s.level!==catalogLevel&&!(s.allowedLevels||[]).includes(catalogLevel))return false;if(savedOnly&&!state.bookmarks[s.id])return false;return true;});}
 function updateCatalog(){const node=$('catalog-result');if(!node)return;const q=norm(catalogQuery.trim());if(!q){const list=catalogBase();node.innerHTML=`<p class="muted" style="font-size:12px">${list.length} temas${catalogLevel?' · '+catalogLevel:''}</p><div class="lesson-grid">${list.map(card).join('')}</div>${list.length?'':'<div class="empty">No hay temas con estos filtros.</div>'}`;return;}
@@ -617,12 +620,12 @@ const terms=q.split(/\s+/).filter(Boolean),matches=sections.filter(s=>terms.ever
 function enhanceTheory(root){
  if(!root)return;
  let inTheory=false;
- const starts=/comprende|sistema|regla|gramatica|estructura|formas|uso|vocabulario|matiz|errores frecuentes|notas/;
- const stops=/situacion|dialogo|practica|produccion|respuestas|soluciones|evaluacion|lectura/;
+ const starts=/comprende|understand|sistema|system|regla|rule|gramatica|grammar|estructura|structure|formas|forms|uso|usage|vocabulario|vocabulary|matiz|nuance|errores frecuentes|common errors|notas|notes/;
+ const stops=/situacion|situation|dialogo|dialogue|practica|practice|produccion|production|respuestas|answers|soluciones|solutions|evaluacion|evaluation|lectura|reading/;
  root.querySelectorAll('h3,h4,p.source-paragraph').forEach(el=>{
   if(el.matches('h3')){const title=norm(el.textContent);if(stops.test(title))inTheory=false;else if(starts.test(title))inTheory=true;return;}
   if(el.matches('h4')){if(inTheory)el.classList.add('theory-chevron');return;}
-  const lead=el.textContent.trim().match(/^(Objetivo|Regla|Recuerda|Nota|Clave|Importante):/i);
+  const lead=el.textContent.trim().match(/^(Objetivo|Objective|Regla|Rule|Recuerda|Remember|Nota|Note|Clave|Key point|Importante|Important):/i);
   if(lead){el.classList.add('notion-quote');if(el.firstChild?.nodeType===Node.TEXT_NODE){const rest=el.firstChild.splitText(lead[0].length),strong=document.createElement('strong');strong.textContent=lead[0];el.insertBefore(strong,rest);el.firstChild.remove();}}
   if(inTheory&&!lead&&!el.classList.contains('source-eyebrow')&&el.textContent.trim().length>30)el.classList.add('theory-point');
  });
@@ -635,7 +638,7 @@ function addTheoryOutline(root){
  if(headings.length<2)return;
  const nav=document.createElement('nav'),title=document.createElement('div'),list=document.createElement('ol');
  nav.className='theory-outline';nav.setAttribute('aria-label','Contenido de esta lección');
- title.className='theory-outline-title';title.textContent='En esta lección';nav.append(title,list);
+ title.className='theory-outline-title';title.textContent=currentSection?.theme?'In this lesson':'En esta lección';nav.append(title,list);
  headings.forEach((heading,index)=>{heading.id=`theory-section-${index+1}`;const item=document.createElement('li'),button=document.createElement('button');button.type='button';button.textContent=heading.textContent.trim();button.addEventListener('click',()=>heading.scrollIntoView({behavior:'smooth',block:'start'}));item.append(button);list.append(item);});
  root.before(nav);
 }
@@ -656,7 +659,13 @@ main.innerHTML=`<div class="reader-wrap"><div class="reader-top"><button class="
 removeOralSections($('reader-content'));
 enhanceTheory($('reader-content'));
 addTheoryOutline($('reader-content'));
-if(s?.theme){const back=main.querySelector('.reader-top [data-view="home"]'),themeTitle=window.EnglishActivities.themes?.[s.theme]?.title||'Temas';if(back){back.dataset.view=s.theme;back.textContent=`← ${themeTitle}`;}}
+if(s?.theme){
+ const back=main.querySelector('.reader-top [data-view="home"]'),themeTitle=window.EnglishActivities.themes?.[s.theme]?.title||'Themes';
+ if(back){back.dataset.view=s.theme;back.textContent=`← ${themeTitle}`;}
+ const translations=new Map([['← Anterior','← Previous'],['Siguiente →','Next →'],['Marcar como estudiado','Mark as studied'],['✓ Estudiado','✓ Studied'],['Continuar →','Continue →'],['Imprimir este tema','Print this lesson']]);
+ main.querySelectorAll('button').forEach(button=>{const translated=translations.get(button.textContent.trim());if(translated)button.textContent=translated;});
+ const meta=main.querySelector('.reader-meta span:last-child');if(meta?.textContent.trim()==='Material complementario')meta.textContent='Supplementary material';
+}
 $('print-section').addEventListener('click',()=>window.print());$('page-jump-go').addEventListener('click',()=>goPage($('page-jump').value));$('page-jump').addEventListener('keydown',e=>{if(e.key==='Enter')goPage(e.target.value);});if(s){window.EnglishActivities.mountChapter(s.id);if(!s.page){$('page-jump').closest('label').hidden=true;main.querySelector('.source-text-box').hidden=true;}}}
 function renderCardsView(id){currentSection=byId.get(id)||null;
 main.innerHTML=`<div class="main-wrap cards-view"><div class="cards-view-head"><h1 class="page-title">Tarjetas</h1>${id?`<button class="text-button" type="button" data-open-section="${esc(id)}">Volver al tema</button>`:''}</div><div id="study-root"></div></div>`;

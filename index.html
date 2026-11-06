@@ -538,7 +538,7 @@ function nativeErrors(key){
  return `<details class="note-box"><summary class="text-button">Anotar algo que me costó decir</summary><form class="stack" data-error-form="${esc(key)}"><label class="field">Lo que dije o quería decir<textarea name="wanted" required maxlength="1000" placeholder="Quería pedir que repitieran la última parte."></textarea></label><label class="field">Forma correcta en inglés<textarea name="correct" required maxlength="1000" placeholder="Could you repeat the last part, please?"></textarea></label><label class="field">Contexto o explicación<input type="text" name="context" maxlength="500"></label><div class="actions"><button class="btn btn-primary" type="submit">Añadir al repaso</button></div><p class="muted" data-error-status role="status"></p></form></details>`;
 }
 function nativeOral(prompt,key){
- return `<section><h3 class="source-heading">Producción oral</h3><blockquote class="model"><p>${esc(prompt)}</p></blockquote><p class="source-paragraph">Di tu respuesta en voz alta con tus propios datos. Después consulta el modelo y revisa qué puedes mejorar.</p><div class="actions"><strong data-timer-display>01:00</strong><button type="button" class="btn" data-action="timer-start">Iniciar 1 minuto</button><button type="button" class="btn" data-action="timer-reset">Reiniciar</button></div>${nativeErrors(key)}</section>`;
+ return '';
 }
 function nativeMount(id){
  const body=element('reader-content');if(!body)return;
@@ -639,12 +639,21 @@ function addTheoryOutline(root){
  headings.forEach((heading,index)=>{heading.id=`theory-section-${index+1}`;const item=document.createElement('li'),button=document.createElement('button');button.type='button';button.textContent=heading.textContent.trim();button.addEventListener('click',()=>heading.scrollIntoView({behavior:'smooth',block:'start'}));item.append(button);list.append(item);});
  root.before(nav);
 }
+function removeOralSections(root){
+ if(!root)return;
+ [...root.querySelectorAll('h2,h3,h4')].filter(heading=>norm(heading.textContent)==='produccion oral').forEach(heading=>{
+  let sibling=heading.nextElementSibling;
+  while(sibling&&!/^H[234]$/.test(sibling.tagName)){const next=sibling.nextElementSibling;sibling.remove();sibling=next;}
+  heading.remove();
+ });
+}
 function renderReader(s,page=0){view=page?'page':'read';currentSection=s||sectionForPage(page);currentPage=page;const series=s?.theme?sections.filter(item=>item.theme===s.theme).sort((a,b)=>(a.themeOrder||99)-(b.themeOrder||99)||a.title.localeCompare(b.title)):chapters,index=series.findIndex(c=>c.id===s?.id),title=page?`Página ${page}`:s.title,category=currentSection?.category||'intro';if(s){state.lastSection=s.id;save();}
 const children=s?sections.filter(x=>x.parentId===s.id):[],content=page?BOOK.pages[page-1].html:s.html;
 const prev=page?{title:'Anterior',page:page-1}:index>0?series[index-1]:null;const next=page?{title:'Siguiente',page:page+1}:index>=0&&index<series.length-1?series[index+1]:null;
 const effectiveScope=currentSection?.category==='reading'?(currentSection.parentId||currentSection.id):(s?.id||currentSection?.id);
 const vocab=VOCAB.filter(v=>v.sectionId===effectiveScope);
 main.innerHTML=`<div class="reader-wrap"><div class="reader-top"><button class="btn" type="button" data-view="home">← Biblioteca</button><div class="reader-nav">${prev&&(!page||page>1)?`<button class="btn" type="button" ${page?'data-page="'+prev.page+'"':'data-open-section="'+prev.id+'"'}>← Anterior</button>`:''}${next&&(!page||page<493)?`<button class="btn" type="button" ${page?'data-page="'+next.page+'"':'data-open-section="'+next.id+'"'}>Siguiente →</button>`:''}</div></div><div class="reader-meta"><span class="pill">${esc(currentSection?.level||labels[category]||'Libro')}</span><span>${page?esc(currentSection?.title||''): s.page?'Páginas '+s.page+(s.endPage>s.page?'–'+s.endPage:''):'Material complementario'}</span></div><h1 class="page-title">${esc(title)}</h1><div class="reader-actions">${vocab.length?`<button class="btn btn-primary" data-study="cards" data-scope="${effectiveScope}" type="button">Tarjetas · ${vocab.length}</button>`:''}${s?`<button class="btn" type="button" data-complete="${s.id}" aria-pressed="${!!state.completed[s.id]}">${state.completed[s.id]?'✓ Estudiado':'Marcar como estudiado'}</button>`:''}${page||s.page?`<button class="btn" data-original data-pdf-page="${page||s.page}" type="button">Original</button>`:''}</div>${children.length?`<details class="chapter-children"><summary>Secciones de este bloque · ${children.length}</summary><div class="child-links">${children.map(c=>`<button class="btn" type="button" data-open-section="${c.id}">${esc(c.title)}</button>`).join('')}</div></details>`:''}<div class="reader-body" id="reader-content">${content}</div><div class="reader-bottom actions">${next&&(!page||page<493)?`<button class="btn btn-primary" type="button" ${page?'data-page="'+next.page+'"':'data-open-section="'+next.id+'"'}>Continuar →</button>`:''}<button class="btn" id="print-section" type="button">Imprimir este tema</button><label class="field" style="display:flex;align-items:center;gap:8px">Ir a página<input type="number" id="page-jump" min="1" max="493" value="${page||s.page}" style="width:85px"><button class="btn" id="page-jump-go" type="button">Ir</button></label></div><details class="source-text-box"><summary class="text-button">Consultar transcripción íntegra de las páginas originales</summary><div class="source-text">${(page?[BOOK.pages[page-1]]:BOOK.pages.slice(s.page-1,s.endPage)).map(p=>`<h3>Página ${p.number}</h3>${esc(p.text)}`).join('\n\n')}</div></details></div>`;
+removeOralSections($('reader-content'));
 enhanceTheory($('reader-content'));
 addTheoryOutline($('reader-content'));
 if(s?.theme){const back=main.querySelector('.reader-top [data-view="home"]'),themeTitle=window.EnglishActivities.themes?.[s.theme]?.title||'Temas';if(back){back.dataset.view=s.theme;back.textContent=`← ${themeTitle}`;}}

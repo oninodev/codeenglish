@@ -1,6 +1,6 @@
 # English Studio
 
-Aplicación web autocontenida para estudiar inglés americano desde A1 hasta C2. Presenta el libro completo en una experiencia de lectura enfocada, con búsqueda, modo oscuro y progreso local sin dependencias externas.
+Aplicación web autocontenida para estudiar inglés americano desde A1 hasta C2. Combina el libro completo con una biblioteca de lecturas temáticas en inglés, audio sincronizado, búsqueda, modo oscuro y progreso local sin dependencias externas.
 
 ## Ejecutar localmente
 
@@ -20,7 +20,9 @@ Después abre `http://localhost:4173`.
 - Exportación e importación del progreso en JSON.
 - Modo claro/oscuro y tres tamaños de lectura.
 - Encabezado fijo, indicador de avance y reanudación del punto de lectura de cada tema.
-- Diseño adaptable, navegación por teclado y estilos de impresión.
+- Cursos de Philosophy, History, Startups, Economy, Cinema y Literature.
+- Narración con una sola voz inglesa seleccionada automáticamente y seguimiento palabra por palabra.
+- Diseño adaptable y navegación por teclado.
 
 ## Estructura
 
@@ -28,11 +30,12 @@ La aplicación completa está en `index.html` y se sirve de forma estática. No 
 
 Al modificarlo, conviene comprobar al menos:
 
-1. La portada y los filtros del catálogo.
+1. La portada, los filtros del catálogo y el selector de cursos de Lecturas.
 2. La apertura, navegación y reanudación de un capítulo.
-3. La búsqueda dentro del libro y los filtros del índice.
-4. La exportación e importación del progreso.
-5. Los diseños de escritorio y móvil.
+3. La reproducción, pausa, reinicio y resaltado de palabras en una lectura.
+4. La búsqueda dentro del libro y los filtros del índice.
+5. La exportación e importación del progreso.
+6. Los diseños de escritorio y móvil.
 
 ## Privacidad
 
